@@ -980,7 +980,10 @@ static int install_gpt_partition_image(struct img_type *img,
 	 * Set device for next handler
 	 */
 	partno = fdisk_partition_get_partno(pa);
-	snprintf(device, sizeof(device), "%s%zu", img->device, partno + 1);
+	if(strncmp("/dev/mmcblk", img->device, 11) == 0)
+	  snprintf(device, sizeof(device), "%sp%zu", img->device, partno + 1);
+	else
+	  snprintf(device, sizeof(device), "%s%zu", img->device, partno + 1);
 	strlcpy(img->device, device, sizeof(img->device));
 
 	/*
