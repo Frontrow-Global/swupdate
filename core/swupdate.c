@@ -134,7 +134,7 @@ static void usage(char *programname)
 		" -B, --bootloader               : bootloader interface (default: " PREPROCVALUE(BOOTLOADER_DEFAULT) ")\n"
 		" -p, --postupdate               : execute post-update command\n"
 		" -P, --preupdate                : execute pre-update command\n"
-		" -e, --select <software>/<mode> : Select software images set and source\n"
+		" -e, --select <software>,<mode> : Select software images set and source\n"
 		"                                  Ex.: stable,main\n"
 		" -g, --get-root                 : detect and print the root device and exit\n" 
 		" -q, --accepted-select\n"
@@ -166,7 +166,7 @@ static void usage(char *programname)
 		" -v, --verbose                  : be verbose, set maximum loglevel\n"
 		"     --version                  : print SWUpdate version and exit\n"
 #ifdef CONFIG_HW_COMPATIBILITY
-		" -H, --hwrevision <board>/<rev> : Set hardware revision\n"
+		" -H, --hwrevision <board>:<rev> : Set hardware revision\n"
 #endif
 		" -c, --check                    : check image and exit, use with -i <filename>\n"
 		" -h, --help                     : print this help and exit\n"
@@ -204,7 +204,7 @@ static int opt_to_hwrev(char *param, struct hw_type *hw)
 	if (!param)
 		return 0;
 
-	s = strchr(param, '/');
+	s = strchr(param, ':');
 
 	if (!s) {
 		ERROR("You pass Hardware Revision in wrong format: %s",
@@ -227,7 +227,7 @@ static int parse_image_selector(const char *selector, struct swupdate_cfg *sw)
 	char *pos;
 
 	DEBUG("Parsing selector: %s", selector);
-	pos = strchr(selector, '/');
+	pos = strchr(selector, ',');
 	if (pos == NULL) {
 		ERROR("Incorrect select option format: %s", selector);
 		return -EINVAL;
